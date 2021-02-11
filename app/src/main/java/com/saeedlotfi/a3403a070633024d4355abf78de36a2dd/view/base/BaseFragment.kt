@@ -1,4 +1,4 @@
-package com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.base
+package com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.view.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 
 abstract class BaseFragment<dataBinding : ViewDataBinding,>(
     private val layout: Int,
