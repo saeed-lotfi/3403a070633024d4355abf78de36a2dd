@@ -1,12 +1,16 @@
 package com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.view.ship
 
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.R
+import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.data.model.ShipModel
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.databinding.ShipFragmentBinding
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.util.showToast
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.view.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.async
 
 @AndroidEntryPoint
 class ShipFragment : BaseFragment<ShipFragmentBinding>(R.layout.ship_fragment) {
@@ -17,8 +21,11 @@ class ShipFragment : BaseFragment<ShipFragmentBinding>(R.layout.ship_fragment) {
 
         binding.submitShip.setOnClickListener {
 
+
+            val name: String = binding.edtShipName.text.toString()
+
             // if ship has name
-            if (binding.edtShipName.text!!.isNotEmpty()) {
+            if (name.isNotEmpty()) {
 
                 val total =
                     binding.capacitySeekbar.progress + binding.powerSeekbar.progress + binding.speedSeekbar.progress
@@ -26,11 +33,26 @@ class ShipFragment : BaseFragment<ShipFragmentBinding>(R.layout.ship_fragment) {
                 // if total given point is not more than total point
                 if (total <= resources.getInteger(R.integer.max_point)) {
 
-                    viewModel.
+                    val shipModel = ShipModel(
+                        binding.speedSeekbar.progress,
+                        binding.capacitySeekbar.progress,
+                        binding.powerSeekbar.progress,
+                        name
+                    )
 
-                    val action = ShipFragmentDirections.actionShipFragmentToStationFragment()
+                    val handler = CoroutineExceptionHandler { _, _ ->
+                        requireContext().showToast(getString(R.string.try_again))
+                    }
 
-                    findNavController().navigate(action)
+                    val job = lifecycleScope.async(handler) {
+                        viewModel.putShipInfo(shipModel)
+                    }
+
+                    job.invokeOnCompletion {
+                        val action = ShipFragmentDirections.actionShipFragmentToStationFragment()
+                        findNavController().navigate(action)
+                    }
+
                 } else {
                     requireContext().showToast(getString(R.string.overloaded))
                 }
