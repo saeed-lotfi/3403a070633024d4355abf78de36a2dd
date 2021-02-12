@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    app:startDestination="@id/shipFragment">
+    <fragment
+        android:id="@+id/shipFragment"
+        android:name="com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.view.ship.ShipFragment"
+        android:label="ShipFragment" >
+        <action
+            android:id="@+id/action_shipFragment_to_stationFragment"
+            app:destination="@id/stationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stationFragment"
+        android:name="com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.view.station.StationFragment"
+        android:label="StationFragment" />
+</navigation>
