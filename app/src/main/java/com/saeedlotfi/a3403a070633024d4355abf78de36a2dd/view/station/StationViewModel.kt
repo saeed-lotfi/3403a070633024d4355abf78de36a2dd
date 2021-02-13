@@ -29,7 +29,11 @@ class StationViewModel @Inject constructor(
     // job for search
     private var searchJob: Job? = null
 
+    // get stations list
     private var job: Job? = null
+
+    // get
+    private var jobUpdate: Job? = null
 
     private val exceptionHandler = CoroutineExceptionHandler { _, error ->
         Log.d("tag", "rrpr   $error")
@@ -61,7 +65,8 @@ class StationViewModel @Inject constructor(
     }
 
     fun updateFavouriteStatus(id: Int, favourite: Int) {
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+        jobUpdate?.cancel()
+        jobUpdate =viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             updateFavouriteStationStatusUseCase.invoke(id, favourite)
             getStations()
         }

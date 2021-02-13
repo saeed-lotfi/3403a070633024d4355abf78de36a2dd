@@ -50,21 +50,28 @@ class StationAdapter constructor(val adapterClick: (Boolean, Int, Int) -> Unit) 
 
         if (stationModel.favourite == 1)
             holder.imgStart.setImageResource(R.drawable.ic_baseline_star_24)
+        else
+            holder.imgStart.setImageResource(R.drawable.ic_baseline_star_border_24)
+
 
         holder.imgStart.setOnClickListener {
-            if (stationModel.favourite == 0)
+
+            val favourite:Int=stationModel.favourite
+
+
+            if (favourite == 0)
                 holder.imgStart.setImageResource(R.drawable.ic_baseline_star_24)
             else
                 holder.imgStart.setImageResource(R.drawable.ic_baseline_star_border_24)
 
             // if get 1 change it to 0 and vice versa it
             var favouriteStatus = 1
-            if (stationModel.favourite == 1)
+            if (favourite== 1)
                 favouriteStatus = 0
-
 
             // adapter click for favourite list
             adapterClick(true, favouriteStatus, stationModel.id)
+
         }
 
     }
