@@ -16,6 +16,8 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
 
     private val viewModel: StationViewModel by viewModels()
     private lateinit var stationAdapter: StationAdapter
+    private var getRemoteData = false
+    private lateinit var data: List<StationModel>
 
     override fun init() {
 
@@ -25,7 +27,10 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
         getStationInfo()
 
         binding.btnTryAgain.setOnClickListener {
-            getStationInfo()
+            if (!getRemoteData)
+                getStationInfo()
+            else
+                saveStationInLocal()
         }
 
 
@@ -36,7 +41,8 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
             when (it.status) {
                 Status.LOADING -> binding.progressbarStation.showTheView()
                 Status.SUCCESS -> {
-                    saveStation(it.data!!)
+                    data = it.data!!
+                    saveStationInLocal()
                 }
                 Status.ERROR -> {
                     binding.btnTryAgain.showTheView()
@@ -47,7 +53,7 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
 
     }
 
-    private fun saveStation(data: List<StationModel>) {
+    private fun saveStationInLocal() {
         viewModel.saveStations(data).observe(this, {
             when (it.status) {
                 Status.LOADING -> {
