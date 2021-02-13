@@ -7,6 +7,7 @@ import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.data.model.StationModel
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.usecase.GetAllStationsUseCase
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.usecase.GetSearchStationsUseCase
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.usecase.PutAllStationsUseCase
+import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.usecase.UpdateFavouriteStationStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +19,8 @@ import javax.inject.Inject
 class StationViewModel @Inject constructor(
         private val getAllStationsUseCase: GetAllStationsUseCase,
         private val putAllStationsUseCase: PutAllStationsUseCase,
-        private val getSearchStationsUseCase: GetSearchStationsUseCase
+        private val getSearchStationsUseCase: GetSearchStationsUseCase,
+        private val updateFavouriteStationStatusUseCase: UpdateFavouriteStationStatusUseCase
 ) : ViewModel() {
 
 
@@ -58,4 +60,12 @@ class StationViewModel @Inject constructor(
             _stationsList.postValue(getSearchStationsUseCase.invoke(searchQuery))
         }
     }
+
+    fun updateFavouriteStatus(id: Int, favourite: Int) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            updateFavouriteStationStatusUseCase.invoke(id, favourite)
+        }
+
+    }
+
 }

@@ -24,7 +24,6 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
 
         setUpAdapter()
 
-//todo check if has data no longer need to get it again
         getStationInfo()
 
         manageTryAgainButton()
@@ -97,8 +96,12 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
     private fun setUpAdapter() {
 
         stationAdapter = StationAdapter()
-        {it,e->
-
+        { favourite, isFavourite, id ->
+            if (favourite) {
+                viewModel.updateFavouriteStatus(id, isFavourite)
+            } else {
+                //todo to do travel
+            }
 
         }
 
