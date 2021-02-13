@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.R
+import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.data.model.CurrentPositionModel
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.data.model.StationModel
 
-class StationAdapter constructor(val adapterClick: (Boolean, Int, Int) -> Unit) : ListAdapter<StationModel, StationAdapter.StationViewHolder>(StationCallBack()) {
+class StationAdapter constructor(val adapterClick: (StationModel?, Int, Int) -> Unit) :
+    ListAdapter<StationModel, StationAdapter.StationViewHolder>(StationCallBack()) {
 
     inner class StationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvName: TextView = itemView.findViewById(R.id.tv_station_name)
@@ -46,7 +48,16 @@ class StationAdapter constructor(val adapterClick: (Boolean, Int, Int) -> Unit) 
         holder.tvNeed.text = stationModel.need.toString()
 
         // adapter click for travel
-        holder.travelButton.setOnClickListener { adapterClick(false, 0, stationModel.id) }
+        holder.travelButton.setOnClickListener {
+            // if not travel before let them to go
+            if (stationModel.traveled == 0) {
+                adapterClick(
+                    stationModel,
+                    0,
+                    stationModel.id
+                )
+            }
+        }
 
         if (stationModel.favourite == 1)
             holder.imgStart.setImageResource(R.drawable.ic_baseline_star_24)
@@ -56,7 +67,7 @@ class StationAdapter constructor(val adapterClick: (Boolean, Int, Int) -> Unit) 
 
         holder.imgStart.setOnClickListener {
 
-            val favourite:Int=stationModel.favourite
+            val favourite: Int = stationModel.favourite
 
 
             if (favourite == 0)
@@ -66,11 +77,15 @@ class StationAdapter constructor(val adapterClick: (Boolean, Int, Int) -> Unit) 
 
             // if get 1 change it to 0 and vice versa it
             var favouriteStatus = 1
-            if (favourite== 1)
+            if (favourite == 1)
                 favouriteStatus = 0
 
             // adapter click for favourite list
-            adapterClick(true, favouriteStatus, stationModel.id)
+            adapterClick(
+                null,
+                favouriteStatus,
+                stationModel.id
+            )
 
         }
 
