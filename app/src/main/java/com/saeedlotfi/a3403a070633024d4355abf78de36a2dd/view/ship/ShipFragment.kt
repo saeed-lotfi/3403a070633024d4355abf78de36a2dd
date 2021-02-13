@@ -28,16 +28,17 @@ class ShipFragment : BaseFragment<ShipFragmentBinding>(R.layout.ship_fragment) {
             if (name.isNotEmpty()) {
 
                 val total =
-                    binding.capacitySeekbar.progress + binding.powerSeekbar.progress + binding.speedSeekbar.progress
+                        binding.capacitySeekbar.progress + binding.powerSeekbar.progress + binding.speedSeekbar.progress
 
-                // if total given point is not more than total point
-                if (total <= resources.getInteger(R.integer.max_point)) {
+
+                // if total given point is equal to power
+                if (total == resources.getInteger(R.integer.max_point) && checkSeekBarIsNotZero()) {
 
                     val shipModel = ShipModel(
-                        binding.speedSeekbar.progress,
-                        binding.capacitySeekbar.progress,
-                        binding.powerSeekbar.progress,
-                        name
+                            binding.speedSeekbar.progress,
+                            binding.capacitySeekbar.progress,
+                            binding.powerSeekbar.progress,
+                            name
                     )
 
                     val handler = CoroutineExceptionHandler { _, _ ->
@@ -54,7 +55,7 @@ class ShipFragment : BaseFragment<ShipFragmentBinding>(R.layout.ship_fragment) {
                     }
 
                 } else {
-                    requireContext().showToast(getString(R.string.overloaded))
+                    requireContext().showToast(getString(R.string.not_loaded))
                 }
             } else {
                 requireContext().showToast(getString(R.string.enter_name))
@@ -63,5 +64,9 @@ class ShipFragment : BaseFragment<ShipFragmentBinding>(R.layout.ship_fragment) {
 
 
     }
+
+    private fun checkSeekBarIsNotZero(): Boolean =
+        binding.capacitySeekbar.progress != 0 && binding.powerSeekbar.progress != 0 && binding.speedSeekbar.progress != 0
+
 
 }
