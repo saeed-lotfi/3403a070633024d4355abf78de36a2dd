@@ -15,4 +15,7 @@
     <string name="ugs">UGS: </string>
     <string name="eus">EUS: </string>
     <string name="ds">DS: </string>
+    <string name="slash">/</string>
+    <string name="travel">Travel</string>
+    <string name="search">search</string>
 </resources>

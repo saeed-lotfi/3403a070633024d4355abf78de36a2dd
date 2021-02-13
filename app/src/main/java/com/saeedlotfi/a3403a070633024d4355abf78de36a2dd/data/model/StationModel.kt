@@ -12,5 +12,6 @@ data class StationModel(
         @SerializedName("coordinateY") val coordinateY: Int,
         @SerializedName("capacity") val capacity: Int,
         @SerializedName("stock") val stock: Int,
-        @SerializedName("need") val need: Int
+        @SerializedName("need") val need: Int,
+        val favourite: Boolean = false
 )
