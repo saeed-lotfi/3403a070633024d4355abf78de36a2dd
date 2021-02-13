@@ -1,5 +1,6 @@
 package com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.view.station
 
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.R
@@ -23,17 +24,36 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
 
         setUpAdapter()
 
-
+//todo check if has data no longer need to get it again
         getStationInfo()
 
+        manageTryAgainButton()
+
+        manageSearch()
+    }
+
+    // search and result
+    private fun manageSearch() {
+        binding.edtSearch.doAfterTextChanged {
+            binding.edtSearch.text.toString().let { textString ->
+                viewModel.getStations(textString)
+            }
+        }
+
+        viewModel.stationsList.observe(this, {
+            stationAdapter.submitList(it)
+        })
+
+    }
+
+    // manage try again button
+    private fun manageTryAgainButton() {
         binding.btnTryAgain.setOnClickListener {
             if (!getRemoteData)
                 getStationInfo()
             else
                 saveStationInLocal()
         }
-
-
     }
 
     private fun getStationInfo() {
@@ -72,10 +92,8 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
         })
     }
 
-    /**
-     * show the recyclerview stations name
-     * set up adapter
-     */
+    // show the recyclerview stations name
+// set up adapter
     private fun setUpAdapter() {
 
         stationAdapter = StationAdapter()

@@ -9,4 +9,7 @@ class StationRepositoryImp @Inject constructor(private val api: ApiService, priv
     override suspend fun getAllStations(): List<StationModel> = api.getPlanets()
 
     override suspend fun saveAllStations(stationModels: List<StationModel>) = dao.insertAll(stationModels)
+
+    override suspend fun getSearchStations(searchQuery: String): List<StationModel> = dao.getSearchStations(searchQuery)
+
 }

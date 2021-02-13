@@ -12,6 +12,6 @@ interface StationsDao {
     suspend fun insertAll(products: List<StationModel>)
 
     @Query("select * from StationModel where name like '%' || :search || '%'")
-    suspend fun loadHamsters(search: String): List<StationModel>
+    suspend fun getSearchStations(search: String): List<StationModel>
 
 }
