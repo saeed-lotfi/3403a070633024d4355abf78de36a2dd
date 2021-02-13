@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.R
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.data.model.StationModel
 
-class StationAdapter constructor(val adapterClick: (Int) -> Unit) : ListAdapter<StationModel, StationAdapter.StationViewHolder>(StationCallBack()) {
+class StationAdapter constructor(val adapterClick: (Boolean, Int) -> Unit) : ListAdapter<StationModel, StationAdapter.StationViewHolder>(StationCallBack()) {
 
     inner class StationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvName: TextView = itemView.findViewById(R.id.tv_station_name)
@@ -30,11 +30,8 @@ class StationAdapter constructor(val adapterClick: (Int) -> Unit) : ListAdapter<
         override fun areItemsTheSame(oldItem: StationModel, newItem: StationModel): Boolean =
                 oldItem.id == newItem.id
 
-
         override fun areContentsTheSame(oldItem: StationModel, newItem: StationModel): Boolean =
                 oldItem == newItem
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StationViewHolder {
@@ -48,11 +45,18 @@ class StationAdapter constructor(val adapterClick: (Int) -> Unit) : ListAdapter<
         holder.tvName.text = stationModel.name
         holder.tvCapacity.text = stationModel.capacity.toString()
         holder.tvNeed.text = stationModel.need.toString()
-        holder.travelButton.setOnClickListener { adapterClick(stationModel.id) }
+        holder.travelButton.setOnClickListener { adapterClick(false, stationModel.id) }
 
         if (stationModel.favourite)
             holder.imgStart.setImageResource(R.drawable.ic_baseline_star_24)
 
+        holder.imgStart.setOnClickListener {
+            if (stationModel.favourite)
+                holder.imgStart.setImageResource(R.drawable.ic_baseline_star_24)
+            else
+                holder.imgStart.setImageResource(R.drawable.ic_baseline_star_border_24)
+            adapterClick(true, stationModel.id)
+        }
 
     }
 

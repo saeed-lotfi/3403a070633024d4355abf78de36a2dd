@@ -97,7 +97,8 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
     private fun setUpAdapter() {
 
         stationAdapter = StationAdapter()
-        {
+        {it,e->
+
 
         }
 
