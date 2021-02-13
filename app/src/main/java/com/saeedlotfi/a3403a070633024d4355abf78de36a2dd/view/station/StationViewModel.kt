@@ -4,9 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.data.model.Resource
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.data.model.StationModel
-import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.usecase.GetAllStationsUseCase
-import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.usecase.GetSearchStationsUseCase
-import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.usecase.PutAllStationsUseCase
+import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.usecase.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -16,9 +14,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StationViewModel @Inject constructor(
-        private val getAllStationsUseCase: GetAllStationsUseCase,
-        private val putAllStationsUseCase: PutAllStationsUseCase,
-        private val getSearchStationsUseCase: GetSearchStationsUseCase
+    private val getAllStationsRemoteRemoteUseCase: GetAllStationsRemoteUseCase,
+    private val putAllStationsUseCase: PutAllStationsUseCase,
+    private val getSearchStationsUseCase: GetSearchStationsUseCase,
+    private val updateFavouriteStationStatusUseCase: UpdateFavouriteStationStatusUseCase,
+    private val getAllStationUseCase: GetAllStationsUseCase
 ) : ViewModel() {
 
 
@@ -29,15 +29,16 @@ class StationViewModel @Inject constructor(
     // job for search
     private var searchJob: Job? = null
 
+    private var job: Job? = null
+
     private val exceptionHandler = CoroutineExceptionHandler { _, error ->
-        // Do what you want with the error
-        Log.d("tag", error.toString())
+        Log.d("tag", "rrpr   $error")
     }
 
     fun getAllStation() = liveData(Dispatchers.Main) {
         emit(Resource.loading(null))
         try {
-            emit(Resource.success(getAllStationsUseCase.invoke()))
+            emit(Resource.success(getAllStationsRemoteRemoteUseCase.invoke()))
         } catch (exception: Exception) {
             emit(Resource.error(null, exception.toString()))
         }
@@ -58,4 +59,19 @@ class StationViewModel @Inject constructor(
             _stationsList.postValue(getSearchStationsUseCase.invoke(searchQuery))
         }
     }
+
+    fun updateFavouriteStatus(id: Int, favourite: Int) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            updateFavouriteStationStatusUseCase.invoke(id, favourite)
+            getStations()
+        }
+    }
+
+    fun getStations() {
+        job?.cancel()
+        job = viewModelScope.launch(Dispatchers.IO+ exceptionHandler) {
+            _stationsList.postValue(getAllStationUseCase.invoke())
+        }
+    }
+
 }

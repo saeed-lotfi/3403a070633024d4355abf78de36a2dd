@@ -5,10 +5,10 @@ import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.data.model.StationModel
 interface StationRepository {
 
     /**
-     * get all stations
+     * get all stations from remote
      * @return get all station
      */
-    suspend fun getAllStations(): List<StationModel>
+    suspend fun getAllStationsRemote(): List<StationModel>
 
 
     /**
@@ -22,7 +22,13 @@ interface StationRepository {
      * get search stations
      * @return list of station
      */
-    suspend fun getSearchStations(searchQuery: String):List<StationModel>
+    suspend fun getSearchStations(searchQuery: String): List<StationModel>
+
+    /**
+     * get all stations
+     * @return get all station
+     */
+    suspend fun getAllStations(): List<StationModel>
 
 
 }

@@ -8,10 +8,21 @@
         android:label="ShipFragment" >
         <action
             android:id="@+id/action_shipFragment_to_stationFragment"
-            app:destination="@id/stationFragment" />
+            app:destination="@id/stationFragment"
+            app:popUpTo="@id/shipFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/stationFragment"
         android:name="com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.view.station.StationFragment"
-        android:label="StationFragment" />
+        android:label="StationFragment" >
+        <action
+            android:id="@+id/action_stationFragment_to_favouriteFragment"
+            app:destination="@id/favouriteFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteFragment"
+        android:name="com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.view.favourite.FavouriteFragment"
+        android:label="FavouriteFragment" />
 </navigation>

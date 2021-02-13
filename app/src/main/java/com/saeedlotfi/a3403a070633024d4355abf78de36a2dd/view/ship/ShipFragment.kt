@@ -21,6 +21,8 @@ class ShipFragment : BaseFragment<ShipFragmentBinding>(R.layout.ship_fragment) {
 
         binding.submitShip.setOnClickListener {
 
+            val action = ShipFragmentDirections.actionShipFragmentToStationFragment()
+            findNavController().navigate(action)
 
             val name: String = binding.edtShipName.text.toString()
 
