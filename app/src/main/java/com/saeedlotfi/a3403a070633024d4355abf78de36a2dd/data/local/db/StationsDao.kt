@@ -24,4 +24,7 @@ interface StationsDao {
     @Query("select * from StationModel")
     suspend fun getAllStations(): List<StationModel>
 
+    @Query("update StationModel SET  traveled=1, need=0 , stock=capacity where id=:id")
+    suspend fun updateStation(id: Int)
+
 }

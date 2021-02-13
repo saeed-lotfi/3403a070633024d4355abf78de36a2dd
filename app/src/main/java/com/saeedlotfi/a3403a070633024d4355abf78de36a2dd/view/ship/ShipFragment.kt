@@ -20,10 +20,6 @@ class ShipFragment : BaseFragment<ShipFragmentBinding>(R.layout.ship_fragment) {
     override fun init() {
 
         binding.submitShip.setOnClickListener {
-
-            val action = ShipFragmentDirections.actionShipFragmentToStationFragment()
-            findNavController().navigate(action)
-
             val name: String = binding.edtShipName.text.toString()
 
             // if ship has name
@@ -37,10 +33,10 @@ class ShipFragment : BaseFragment<ShipFragmentBinding>(R.layout.ship_fragment) {
                 if (total == resources.getInteger(R.integer.max_point) && checkSeekBarIsNotZero()) {
 
                     val shipModel = ShipModel(
-                            binding.speedSeekbar.progress,
-                            binding.capacitySeekbar.progress,
-                            binding.powerSeekbar.progress,
-                            name
+                        binding.speedSeekbar.progress * 20,
+                        binding.speedSeekbar.progress * 10000,
+                        binding.powerSeekbar.progress * 10000,
+                        name
                     )
 
                     val handler = CoroutineExceptionHandler { _, _ ->
