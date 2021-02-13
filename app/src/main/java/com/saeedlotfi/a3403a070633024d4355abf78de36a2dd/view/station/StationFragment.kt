@@ -26,9 +26,20 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
 
         getStationInfo()
 
-        manageTryAgainButton()
+//        manageTryAgainButton()
+//
+//        manageSearch()
 
-        manageSearch()
+        // get station data from LiveData
+        getStationsData()
+    }
+
+    private fun getStationsData() {
+        viewModel.stationsList.observe(this, {
+            stationAdapter.submitList(it)
+        })
+
+        viewModel.getStations()
     }
 
     // search and result
@@ -39,9 +50,6 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
             }
         }
 
-        viewModel.stationsList.observe(this, {
-            stationAdapter.submitList(it)
-        })
 
     }
 
@@ -79,7 +87,6 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
                     //nothing
                 }
                 Status.SUCCESS -> {
-                    stationAdapter.submitList(data)
                     binding.btnTryAgain.hideTheView()
                 }
 

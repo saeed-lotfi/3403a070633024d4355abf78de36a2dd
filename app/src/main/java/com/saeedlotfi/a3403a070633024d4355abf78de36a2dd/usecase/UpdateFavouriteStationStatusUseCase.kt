@@ -6,7 +6,6 @@ import javax.inject.Inject
 
 class UpdateFavouriteStationStatusUseCase @Inject constructor(private val favouriteRepository: FavouriteRepository) {
     suspend operator fun invoke(id: Int, status: Int) {
-        Log.d("tag", "id: $id")
         favouriteRepository.updateFavouriteStatus(id, status)
     }
 }

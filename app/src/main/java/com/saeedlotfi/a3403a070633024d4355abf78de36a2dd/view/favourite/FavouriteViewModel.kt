@@ -11,6 +11,7 @@ import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.usecase.UpdateFavouriteS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +23,8 @@ class FavouriteViewModel @Inject constructor(
     private val _favouriteList = MutableLiveData<List<StationModel>>()
     val favouriteList: LiveData<List<StationModel>> get() = _favouriteList
 
+    private var job: Job? = null
+
     private val exceptionHandler = CoroutineExceptionHandler { _, error ->
         // Do what you want with the error
         Log.d("tag", error.toString())
@@ -29,7 +32,8 @@ class FavouriteViewModel @Inject constructor(
 
 
     fun getFavouriteList() {
-        viewModelScope.launch(Dispatchers.Main + exceptionHandler) {
+        job?.cancel()
+        job = viewModelScope.launch(Dispatchers.Main + exceptionHandler) {
             _favouriteList.postValue(getFavouriteStationUseCase.invoke())
         }
     }
@@ -37,6 +41,7 @@ class FavouriteViewModel @Inject constructor(
     fun deleteFavouriteList(id: Int) {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             updateFavouriteStationStatusUseCase.invoke(id, 0)
+            getFavouriteList()
         }
     }
 

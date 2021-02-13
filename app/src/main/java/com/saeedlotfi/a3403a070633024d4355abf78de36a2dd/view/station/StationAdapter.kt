@@ -23,9 +23,8 @@ class StationAdapter constructor(val adapterClick: (Boolean, Int, Int) -> Unit) 
 
     }
 
-    /**
-     * use it for determine difference
-     */
+
+     //use it for determine difference
     class StationCallBack : DiffUtil.ItemCallback<StationModel>() {
         override fun areItemsTheSame(oldItem: StationModel, newItem: StationModel): Boolean =
                 oldItem.id == newItem.id
@@ -42,7 +41,7 @@ class StationAdapter constructor(val adapterClick: (Boolean, Int, Int) -> Unit) 
 
         val stationModel = getItem(position)
 
-        holder.tvName.text = stationModel.id.toString()
+        holder.tvName.text = stationModel.name
         holder.tvCapacity.text = stationModel.capacity.toString()
         holder.tvNeed.text = stationModel.need.toString()
 

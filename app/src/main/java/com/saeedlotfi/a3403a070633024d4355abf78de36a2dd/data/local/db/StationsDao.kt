@@ -12,7 +12,7 @@ interface StationsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(products: List<StationModel>)
 
-    @Query("select * from StationModel where id like '%' || :search || '%'")
+    @Query("select * from StationModel where name like '%' || :search || '%'")
     suspend fun getSearchStations(search: String): List<StationModel>
 
     @Query("select * from StationModel where favourite == 1")
@@ -20,5 +20,8 @@ interface StationsDao {
 
     @Query("update StationModel SET favourite=:status where id=:id")
     suspend fun updateFavouriteList(id: Int, status: Int)
+
+    @Query("select * from StationModel")
+    suspend fun getAllStations(): List<StationModel>
 
 }
