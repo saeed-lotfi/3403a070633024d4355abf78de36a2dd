@@ -18,4 +18,11 @@ interface StationRepository {
     suspend fun saveAllStations(stationModels: List<StationModel>)
 
 
+    /**
+     * get search stations
+     * @return list of station
+     */
+    suspend fun getSearchStations(searchQuery: String):List<StationModel>
+
+
 }

@@ -13,4 +13,10 @@
     <string name="enter_name">enter name</string>
     <string name="try_again">Try Again!</string>
     <string name="not_loaded">not loaded</string>
+    <string name="ugs">UGS: </string>
+    <string name="eus">EUS: </string>
+    <string name="ds">DS: </string>
+    <string name="slash">/</string>
+    <string name="travel">Travel</string>
+    <string name="search">search</string>
 </resources>

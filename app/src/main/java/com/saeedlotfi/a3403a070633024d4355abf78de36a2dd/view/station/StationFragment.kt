@@ -1,6 +1,8 @@
 package com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.view.station
 
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.R
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.data.model.StationModel
 import com.saeedlotfi.a3403a070633024d4355abf78de36a2dd.data.model.Status
@@ -14,14 +16,44 @@ import dagger.hilt.android.AndroidEntryPoint
 class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fragment) {
 
     private val viewModel: StationViewModel by viewModels()
+    private lateinit var stationAdapter: StationAdapter
+    private var getRemoteData = false
+    private lateinit var data: List<StationModel>
 
     override fun init() {
+
+        setUpAdapter()
+
+//todo check if has data no longer need to get it again
         getStationInfo()
 
-        binding.btnTryAgain.setOnClickListener {
-            getStationInfo()
+        manageTryAgainButton()
+
+        manageSearch()
+    }
+
+    // search and result
+    private fun manageSearch() {
+        binding.edtSearch.doAfterTextChanged {
+            binding.edtSearch.text.toString().let { textString ->
+                viewModel.getStations(textString)
+            }
         }
 
+        viewModel.stationsList.observe(this, {
+            stationAdapter.submitList(it)
+        })
+
+    }
+
+    // manage try again button
+    private fun manageTryAgainButton() {
+        binding.btnTryAgain.setOnClickListener {
+            if (!getRemoteData)
+                getStationInfo()
+            else
+                saveStationInLocal()
+        }
     }
 
     private fun getStationInfo() {
@@ -29,7 +61,8 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
             when (it.status) {
                 Status.LOADING -> binding.progressbarStation.showTheView()
                 Status.SUCCESS -> {
-                    saveStation(it.data!!)
+                    data = it.data!!
+                    saveStationInLocal()
                 }
                 Status.ERROR -> {
                     binding.btnTryAgain.showTheView()
@@ -40,13 +73,16 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
 
     }
 
-    private fun saveStation(data: List<StationModel>) {
+    private fun saveStationInLocal() {
         viewModel.saveStations(data).observe(this, {
             when (it.status) {
                 Status.LOADING -> {
                     //nothing
                 }
-                Status.SUCCESS -> binding.btnTryAgain.hideTheView()
+                Status.SUCCESS -> {
+                    stationAdapter.submitList(data)
+                    binding.btnTryAgain.hideTheView()
+                }
 
                 Status.ERROR -> {
                     binding.btnTryAgain.showTheView()
@@ -54,5 +90,22 @@ class StationFragment : BaseFragment<StationFragmentBinding>(R.layout.station_fr
                 }
             }
         })
+    }
+
+    // show the recyclerview stations name
+// set up adapter
+    private fun setUpAdapter() {
+
+        stationAdapter = StationAdapter()
+        {it,e->
+
+
+        }
+
+        binding.rcvStations.apply {
+            hasFixedSize()
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = stationAdapter
+        }
     }
 }
