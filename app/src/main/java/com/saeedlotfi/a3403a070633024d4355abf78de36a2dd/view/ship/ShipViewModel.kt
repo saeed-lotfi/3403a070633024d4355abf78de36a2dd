@@ -9,7 +9,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ShipViewModel @Inject constructor(private val useCase: PutShipUseCase) : ViewModel() {
 
-
     suspend fun putShipInfo(shipModel: ShipModel) {
         useCase.invoke(shipModel)
     }
